@@ -9,18 +9,13 @@ const Index = () => {
     setShowForm(true);
   };
 
-  const handleGenerate = (data: any) => {
-    console.log("Generating letter with data:", data);
-    // TODO: Implement letter generation logic
-  };
-
   return (
     <div className="min-h-screen bg-background">
       {!showForm ? (
         <Hero onGetStarted={handleGetStarted} />
       ) : (
         <div className="container py-12">
-          <LoveLetterForm onGenerate={handleGenerate} />
+          <LoveLetterForm />
         </div>
       )}
     </div>
