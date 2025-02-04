@@ -9,6 +9,7 @@ import StyleSelector from "./form/StyleSelector";
 const LoveLetterForm = () => {
   const { toast } = useToast();
   const [formData, setFormData] = useState({
+    name: "",
     partnerName: "",
     duration: "",
     memories: "",
@@ -30,6 +31,7 @@ const LoveLetterForm = () => {
             "Content-Type": "application/json",
           },
           body: JSON.stringify({
+            name: formData.name,
             partnerName: formData.partnerName,
             memories: formData.memories,
             tone: formData.tone,
@@ -76,6 +78,14 @@ const LoveLetterForm = () => {
             </div>
 
             <div className="space-y-4">
+              <InputField
+                label="Your Name"
+                value={formData.name}
+                onChange={(value) => setFormData({ ...formData, name: value })}
+                placeholder="Enter your name"
+                required
+              />
+
               <InputField
                 label="Partner's Name"
                 value={formData.partnerName}

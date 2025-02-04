@@ -14,7 +14,7 @@ const Index = () => {
       {!showForm ? (
         <Hero onGetStarted={handleGetStarted} />
       ) : (
-        <div className="container py-12">
+        <div className="py-12">
           <LoveLetterForm />
         </div>
       )}
