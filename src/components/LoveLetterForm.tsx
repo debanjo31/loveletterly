@@ -1,11 +1,10 @@
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Heart, Sparkles } from "lucide-react";
 import { useToast } from "@/components/ui/use-toast";
 import GeneratedLetter from "./GeneratedLetter";
+import InputField from "./form/InputField";
+import StyleSelector from "./form/StyleSelector";
 
 const LoveLetterForm = () => {
   const { toast } = useToast();
@@ -70,57 +69,36 @@ const LoveLetterForm = () => {
             </div>
 
             <div className="space-y-4">
-              <div>
-                <label className="block text-sm font-medium mb-2">Partner's Name</label>
-                <Input
-                  placeholder="Enter their name"
-                  value={formData.partnerName}
-                  onChange={(e) => setFormData({ ...formData, partnerName: e.target.value })}
-                  className="border-primary/20 focus:border-accent"
-                  required
-                />
-              </div>
+              <InputField
+                label="Partner's Name"
+                value={formData.partnerName}
+                onChange={(value) => setFormData({ ...formData, partnerName: value })}
+                placeholder="Enter their name"
+                required
+              />
 
-              <div>
-                <label className="block text-sm font-medium mb-2">Relationship Duration (years)</label>
-                <Input
-                  type="number"
-                  placeholder="e.g., 2"
-                  value={formData.duration}
-                  onChange={(e) => setFormData({ ...formData, duration: e.target.value })}
-                  className="border-primary/20 focus:border-accent"
-                  required
-                />
-              </div>
+              <InputField
+                label="Relationship Duration (years)"
+                type="number"
+                value={formData.duration}
+                onChange={(value) => setFormData({ ...formData, duration: value })}
+                placeholder="e.g., 2"
+                required
+              />
 
-              <div>
-                <label className="block text-sm font-medium mb-2">Special Memories & Traits</label>
-                <Textarea
-                  placeholder="Share some special moments or personality traits..."
-                  value={formData.memories}
-                  onChange={(e) => setFormData({ ...formData, memories: e.target.value })}
-                  className="border-primary/20 focus:border-accent min-h-[120px]"
-                  required
-                />
-              </div>
+              <InputField
+                label="Special Memories & Traits"
+                type="textarea"
+                value={formData.memories}
+                onChange={(value) => setFormData({ ...formData, memories: value })}
+                placeholder="Share some special moments or personality traits..."
+                required
+              />
 
-              <div>
-                <label className="block text-sm font-medium mb-2">Letter Style</label>
-                <Select
-                  value={formData.tone}
-                  onValueChange={(value) => setFormData({ ...formData, tone: value })}
-                >
-                  <SelectTrigger className="border-primary/20">
-                    <SelectValue placeholder="Choose a style" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="romantic">Romantic</SelectItem>
-                    <SelectItem value="playful">Playful</SelectItem>
-                    <SelectItem value="poetic">Poetic</SelectItem>
-                    <SelectItem value="shakespearean">Shakespearean</SelectItem>
-                  </SelectContent>
-                </Select>
-              </div>
+              <StyleSelector
+                value={formData.tone}
+                onChange={(value) => setFormData({ ...formData, tone: value })}
+              />
             </div>
 
             <Button

@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { Copy, Download, Heart } from "lucide-react";
+import { Copy, Download, Heart, Share2 } from "lucide-react";
 import { useToast } from "@/components/ui/use-toast";
 import html2canvas from "html2canvas";
 
@@ -52,6 +52,44 @@ const GeneratedLetter = ({ letter }: GeneratedLetterProps) => {
     }
   };
 
+  const handleShare = async () => {
+    try {
+      const element = document.getElementById("love-letter-card");
+      if (!element) return;
+      
+      const canvas = await html2canvas(element);
+      const blob = await new Promise<Blob>((resolve) => 
+        canvas.toBlob((blob) => resolve(blob!), 'image/png')
+      );
+      
+      if (navigator.share) {
+        await navigator.share({
+          files: [new File([blob], 'love-letter.png', { type: 'image/png' })],
+          title: 'Love Letter',
+          text: 'Check out this love letter I created!'
+        });
+        
+        toast({
+          title: "Shared!",
+          description: "Your love letter has been shared",
+        });
+      } else {
+        toast({
+          variant: "destructive",
+          title: "Error",
+          description: "Sharing is not supported on this device",
+        });
+      }
+    } catch (error) {
+      console.error("Error sharing letter:", error);
+      toast({
+        variant: "destructive",
+        title: "Error",
+        description: "Failed to share the love letter",
+      });
+    }
+  };
+
   return (
     <div className="max-w-2xl mx-auto space-y-6">
       <Card 
@@ -84,6 +122,14 @@ const GeneratedLetter = ({ letter }: GeneratedLetterProps) => {
         >
           <Download className="w-4 h-4" />
           Download E-Card
+        </Button>
+        <Button
+          variant="secondary"
+          className="gap-2"
+          onClick={handleShare}
+        >
+          <Share2 className="w-4 h-4" />
+          Share
         </Button>
       </div>
     </div>
