@@ -190,13 +190,76 @@ const GeneratedLetter = ({ letter }: GeneratedLetterProps) => {
 
   const handleShare = async () => {
     try {
-      const canvas = canvasRef.current;
-      if (!canvas) {
-        throw new Error("Canvas not found");
+      const canvas = document.createElement("canvas");
+      const ctx = canvas.getContext("2d");
+      if (!ctx) return;
+
+      const img = new Image();
+      img.crossOrigin = "anonymous";
+
+      await new Promise((resolve, reject) => {
+        img.onload = resolve;
+        img.onerror = reject;
+        img.src = backgroundImage;
+      });
+
+      canvas.width = img.width;
+      canvas.height = img.height;
+      ctx.drawImage(img, 0, 0);
+
+      // Text configuration
+      const fontSize = 40;
+      ctx.font = `${fontSize}px Arial`;
+      ctx.fillStyle = "black";
+      ctx.textAlign = "center";
+
+      // Calculate max width (4/6 of canvas width)
+      const maxWidth = (canvas.width * 4) / 6;
+      const lineHeight = fontSize * 1.5;
+
+      // Word wrap function
+      function wrapText(text: string): string[] {
+        const words = text.split(" ");
+        const lines: string[] = [];
+        let currentLine = "";
+
+        words.forEach((word) => {
+          const testLine = currentLine ? `${currentLine} ${word}` : word;
+          const metrics = ctx.measureText(testLine);
+
+          if (metrics.width > maxWidth && currentLine) {
+            lines.push(currentLine);
+            currentLine = word;
+          } else {
+            currentLine = testLine;
+          }
+        });
+
+        if (currentLine) {
+          lines.push(currentLine);
+        }
+        return lines;
       }
+
+      // Process and wrap lines
+      const wrappedLines: string[] = [];
+      letter.split("\n").forEach((line) => {
+        wrappedLines.push(...wrapText(line));
+      });
+
+      // Center text block
+      const totalTextHeight = wrappedLines.length * lineHeight;
+      const startY = (canvas.height - totalTextHeight) / 2;
+
+      // Draw wrapped lines
+      wrappedLines.forEach((line, index) => {
+        const yPosition = startY + index * lineHeight;
+        ctx.fillText(line, canvas.width / 2, yPosition);
+      });
 
       // Get image data
       const imageData = canvas.toDataURL("image/png");
+      // const data = canvas.toDataURL("image/png");
 
       // Convert base64 to blob
       const response = await fetch(imageData);
