@@ -35,7 +35,7 @@ const GeneratedLetter = ({ letter }: GeneratedLetterProps) => {
       ctx.drawImage(img, 0, 0);
 
       // Text configuration
-      const fontSize = 30;
+      const fontSize = 40;
       ctx.font = `${fontSize}px Arial`;
       ctx.fillStyle = "black";
       ctx.textAlign = "center";
@@ -116,7 +116,7 @@ const GeneratedLetter = ({ letter }: GeneratedLetterProps) => {
       ctx.drawImage(img, 0, 0);
 
       // Text configuration
-      const fontSize = 30;
+      const fontSize = 40;
       ctx.font = `${fontSize}px Arial`;
       ctx.fillStyle = "black";
       ctx.textAlign = "center";
@@ -190,12 +190,12 @@ const GeneratedLetter = ({ letter }: GeneratedLetterProps) => {
 
   const handleShare = async () => {
     try {
-      const element = document.getElementById("love-letter-card");
-      if (!element) return;
+      const canvas = canvasRef.current;
+      if (!canvas) return;
 
-      const canvas = await html2canvas(element);
+      // Convert canvas to blob
       const blob = await new Promise<Blob>((resolve) =>
-        canvas.toBlob((blob) => resolve(blob!), "image/png")
+        canvas.toBlob((blob) => resolve(blob!), "image/png", 1.0)
       );
 
       if (navigator.share) {
