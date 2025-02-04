@@ -191,37 +191,59 @@ const GeneratedLetter = ({ letter }: GeneratedLetterProps) => {
   const handleShare = async () => {
     try {
       const canvas = canvasRef.current;
-      if (!canvas) return;
+      if (!canvas) {
+        throw new Error("Canvas not found");
+      }
 
-      // Convert canvas to blob
-      const blob = await new Promise<Blob>((resolve) =>
-        canvas.toBlob((blob) => resolve(blob!), "image/png", 1.0)
-      );
+      // Get image data
+      const imageData = canvas.toDataURL("image/png");
 
-      if (navigator.share) {
+      // Convert base64 to blob
+      const response = await fetch(imageData);
+      const blob = await response.blob();
+
+      // Create file from blob
+      const file = new File([blob], "love-letter.png", {
+        type: "image/png",
+        lastModified: Date.now(),
+      });
+
+      if (navigator.canShare && navigator.canShare({ files: [file] })) {
         await navigator.share({
-          files: [new File([blob], "love-letter.png", { type: "image/png" })],
+          files: [file],
           title: "Love Letter",
-          text: "Check out this love letter I created!",
+          text: "Check out this love letter!",
         });
 
         toast({
-          title: "Shared!",
+          title: "Shared successfully!",
           description: "Your love letter has been shared",
         });
       } else {
-        toast({
-          variant: "destructive",
-          title: "Error",
-          description: "Sharing is not supported on this device",
-        });
+        // Fallback for devices that don't support file sharing
+        const shareData = {
+          title: "Love Letter",
+          text: "Check out this love letter!",
+          url: window.location.href,
+        };
+
+        if (navigator.share) {
+          await navigator.share(shareData);
+          toast({
+            title: "Shared!",
+            description: "Link to create love letter has been shared",
+          });
+        } else {
+          throw new Error("Sharing not supported on this device");
+        }
       }
     } catch (error) {
-      console.error("Error sharing letter:", error);
+      console.error("Error sharing:", error);
       toast({
         variant: "destructive",
-        title: "Error",
-        description: "Failed to share the love letter",
+        title: "Sharing failed",
+        description:
+          error instanceof Error ? error.message : "Failed to share image",
       });
     }
   };
