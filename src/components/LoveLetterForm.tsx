@@ -22,18 +22,21 @@ const LoveLetterForm = () => {
     setLoading(true);
 
     try {
-      const response = await fetch("https://love-api-oxg4.onrender.com/api/letter/generate", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          partnerName: formData.partnerName,
-          memories: formData.memories,
-          tone: formData.tone,
-          relationshipDuration: parseInt(formData.duration) || 0,
-        }),
-      });
+      const response = await fetch(
+        "https://love-api-oxg4.onrender.com/api/letter/generate",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            partnerName: formData.partnerName,
+            memories: formData.memories,
+            tone: formData.tone,
+            relationshipDuration: parseInt(formData.duration) || 0,
+          }),
+        }
+      );
 
       if (!response.ok) {
         throw new Error("Failed to generate letter");
@@ -41,7 +44,7 @@ const LoveLetterForm = () => {
 
       const data = await response.json();
       setGeneratedLetter(data.text);
-      
+
       toast({
         title: "Success!",
         description: "Your love letter has been generated",
@@ -64,15 +67,21 @@ const LoveLetterForm = () => {
         <div className="max-w-2xl mx-auto p-6 bg-white/80 backdrop-blur-sm rounded-2xl shadow-xl">
           <form onSubmit={handleSubmit} className="space-y-6">
             <div className="text-center mb-8">
-              <h2 className="text-3xl font-bold text-accent mb-2">Create Your Love Letter</h2>
-              <p className="text-foreground/60">Fill in the details to generate a personalized love letter</p>
+              <h2 className="text-3xl font-bold text-accent mb-2">
+                Create Your Love Letter
+              </h2>
+              <p className="text-foreground/60">
+                Fill in the details to generate a personalized love letter
+              </p>
             </div>
 
             <div className="space-y-4">
               <InputField
                 label="Partner's Name"
                 value={formData.partnerName}
-                onChange={(value) => setFormData({ ...formData, partnerName: value })}
+                onChange={(value) =>
+                  setFormData({ ...formData, partnerName: value })
+                }
                 placeholder="Enter their name"
                 required
               />
@@ -81,7 +90,9 @@ const LoveLetterForm = () => {
                 label="Relationship Duration (years)"
                 type="number"
                 value={formData.duration}
-                onChange={(value) => setFormData({ ...formData, duration: value })}
+                onChange={(value) =>
+                  setFormData({ ...formData, duration: value })
+                }
                 placeholder="e.g., 2"
                 required
               />
@@ -90,7 +101,9 @@ const LoveLetterForm = () => {
                 label="Special Memories & Traits"
                 type="textarea"
                 value={formData.memories}
-                onChange={(value) => setFormData({ ...formData, memories: value })}
+                onChange={(value) =>
+                  setFormData({ ...formData, memories: value })
+                }
                 placeholder="Share some special moments or personality traits..."
                 required
               />
