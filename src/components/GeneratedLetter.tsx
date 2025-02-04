@@ -261,9 +261,9 @@ const GeneratedLetter = ({ letter }: GeneratedLetterProps) => {
         </Button>
       </div>
 
-      <div className="flex justify-center">
+      {/* <div className="flex justify-center">
         <canvas ref={canvasRef} className="border border-gray-300"></canvas>
-      </div>
+      </div> */}
     </div>
   );
 };
