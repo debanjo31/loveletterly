@@ -27,15 +27,15 @@ const GeneratedLetter = ({ letter }: GeneratedLetterProps) => {
     try {
       const element = document.getElementById("love-letter-card");
       if (!element) return;
-      
+
       const canvas = await html2canvas(element);
       const data = canvas.toDataURL("image/png");
       const link = document.createElement("a");
-      
+
       link.href = data;
       link.download = "love-letter.png";
       link.click();
-      
+
       toast({
         title: "Downloaded!",
         description: "Your love letter has been saved",
@@ -56,19 +56,19 @@ const GeneratedLetter = ({ letter }: GeneratedLetterProps) => {
     try {
       const element = document.getElementById("love-letter-card");
       if (!element) return;
-      
+
       const canvas = await html2canvas(element);
-      const blob = await new Promise<Blob>((resolve) => 
-        canvas.toBlob((blob) => resolve(blob!), 'image/png')
+      const blob = await new Promise<Blob>((resolve) =>
+        canvas.toBlob((blob) => resolve(blob!), "image/png")
       );
-      
+
       if (navigator.share) {
         await navigator.share({
-          files: [new File([blob], 'love-letter.png', { type: 'image/png' })],
-          title: 'Love Letter',
-          text: 'Check out this love letter I created!'
+          files: [new File([blob], "love-letter.png", { type: "image/png" })],
+          title: "Love Letter",
+          text: "Check out this love letter I created!",
         });
-        
+
         toast({
           title: "Shared!",
           description: "Your love letter has been shared",
@@ -92,11 +92,11 @@ const GeneratedLetter = ({ letter }: GeneratedLetterProps) => {
 
   return (
     <div className="max-w-2xl mx-auto space-y-6">
-      <Card 
+      <Card
         id="love-letter-card"
         className="bg-white/95 backdrop-blur-sm border-primary/20 shadow-xl"
       >
-        <CardContent className="p-8">
+        <CardContent className="p-4 lg:p-8">
           <ScrollArea className="h-[400px] w-full pr-4">
             <div className="font-serif whitespace-pre-wrap leading-relaxed text-foreground/90">
               {letter}
@@ -106,11 +106,7 @@ const GeneratedLetter = ({ letter }: GeneratedLetterProps) => {
       </Card>
 
       <div className="flex justify-center gap-4">
-        <Button
-          variant="outline"
-          className="gap-2"
-          onClick={handleCopy}
-        >
+        <Button variant="outline" className="gap-2" onClick={handleCopy}>
           <Copy className="w-4 h-4" />
           Copy Text
         </Button>
@@ -123,11 +119,7 @@ const GeneratedLetter = ({ letter }: GeneratedLetterProps) => {
           <Download className="w-4 h-4" />
           Download E-Card
         </Button>
-        <Button
-          variant="secondary"
-          className="gap-2"
-          onClick={handleShare}
-        >
+        <Button variant="secondary" className="gap-2" onClick={handleShare}>
           <Share2 className="w-4 h-4" />
           Share
         </Button>

@@ -59,7 +59,7 @@ const LoveLetterForm = () => {
   };
 
   return (
-    <div className="max-w-4xl mx-auto p-6">
+    <div className="max-w-4xl mx-auto py-6 px-3">
       {!generatedLetter ? (
         <div className="max-w-2xl mx-auto p-6 bg-white/80 backdrop-blur-sm rounded-2xl shadow-xl">
           <form onSubmit={handleSubmit} className="space-y-6">
